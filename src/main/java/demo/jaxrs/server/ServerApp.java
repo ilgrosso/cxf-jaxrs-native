@@ -18,27 +18,29 @@
  */
 package demo.jaxrs.server;
 
+import java.util.List;
+import org.apache.cxf.Bus;
+import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
-import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
-public class Server {
+@SpringBootApplication
+public class ServerApp {
 
-    protected Server() throws Exception {
-        JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
-        sf.setResourceClasses(CustomerService.class);
-        sf.setResourceProvider(CustomerService.class,
-                new SingletonResourceProvider(new CustomerService()));
-        sf.setAddress("http://localhost:9000/");
-
-        sf.create();
+    public static void main(final String[] args) throws Exception {
+        SpringApplication.run(ServerApp.class, args);
     }
 
-    public static void main(String[] args) throws Exception {
-        new Server();
-        System.out.println("Server ready...");
+    @Bean
+    public Server rsServer(final Bus bus) {
+        JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
+        sf.setBus(bus);
+        sf.setAddress("/");
 
-        Thread.sleep(5 * 60 * 1000);
-        System.out.println("Server exiting");
-        System.exit(0);
+        sf.setServiceBeans(List.of(new CustomerService()));
+
+        return sf.create();
     }
 }

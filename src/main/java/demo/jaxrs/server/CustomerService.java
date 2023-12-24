@@ -34,14 +34,22 @@ import jakarta.ws.rs.core.Response;
 @Produces("text/xml")
 public class CustomerService {
 
-    long currentId = 123;
+    private long currentId = 123;
 
-    Map<Long, Customer> customers = new HashMap<>();
+    private final Map<Long, Customer> customers = new HashMap<>();
 
-    Map<Long, Order> orders = new HashMap<>();
+    private final Map<Long, Order> orders = new HashMap<>();
 
     public CustomerService() {
-        init();
+        Customer c = new Customer();
+        c.setName("John");
+        c.setId(123);
+        customers.put(c.getId(), c);
+
+        Order o = new Order();
+        o.setDescription("order 223");
+        o.setId(223);
+        orders.put(o.getId(), o);
     }
 
     @GET
@@ -102,17 +110,5 @@ public class CustomerService {
         System.out.println("----invoking getOrder, Order id is: " + orderId);
         long idNumber = Long.parseLong(orderId);
         return orders.get(idNumber);
-    }
-
-    final void init() {
-        Customer c = new Customer();
-        c.setName("John");
-        c.setId(123);
-        customers.put(c.getId(), c);
-
-        Order o = new Order();
-        o.setDescription("order 223");
-        o.setId(223);
-        orders.put(o.getId(), o);
     }
 }

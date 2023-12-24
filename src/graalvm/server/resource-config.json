@@ -125,6 +125,10 @@
     {
       "name":"org.apache.cxf.ws.addressing.Messages",
       "locales":[""]
+    },
+    {
+      "name":"org.apache.cxf.transport.servlet.Messages",
+      "locales":[""]
     }
   ]
 }
